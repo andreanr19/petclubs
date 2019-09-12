@@ -274,7 +274,7 @@ public class Menu {
 
 		System.out.println(
 				"please type of pet the owner has the club\n1:for Dog\n2: for Cat\n3: for Bird\n4: for Reptile");
-		int typeOwner = Integer.parseInt(sc.nextLine());
+		String typeOwner = sc.nextLine();
 
 		try {
 			System.out.println("you registered a pet owner with the following specs:\n" + idOwner + " " + nameOwner
@@ -306,11 +306,11 @@ public class Menu {
 			String namePet = sc.nextLine();
 
 			System.out.println("please type the genre of the pet");
-			int genre = Integer.parseInt(sc.nextLine());
+			String genre = sc.nextLine();
 
 			System.out.println(
 					"please type of pet the owner has the club\n1:for dogs\n2: for birds\n3: bears\n4: lions");
-			int petType = Integer.parseInt(sc.nextLine());
+			String petType = sc.nextLine();
 
 			System.out.println("please type the birthdate of the pet in this format: dd/mm/yy");
 			String bdate = sc.nextLine();
@@ -415,7 +415,7 @@ public class Menu {
 				System.out.println(p.showOwner());
 				break;
 			case 6:
-				p.orderBubblebyFav();
+//				p.orderBubblebyFav();
 				System.out.println(p.showOwner());
 				break;
 			}

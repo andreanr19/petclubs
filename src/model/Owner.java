@@ -9,10 +9,10 @@ public class Owner implements Serializable, Comparable<Owner>, Comparator<Owner>
 	private String name;
 	private String lastName;
 	private String date;
-	private int favPet;
+	private String favPet;
 	private ArrayList<Pet> thePets;
 
-	public Owner(String id, String name, String lastName, String date, int favPet) {
+	public Owner(String id, String name, String lastName, String date, String favPet) {
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
@@ -54,11 +54,11 @@ public class Owner implements Serializable, Comparable<Owner>, Comparator<Owner>
 		this.date = date;
 	}
 
-	public int getFavPet() {
+	public String getFavPet() {
 		return favPet;
 	}
 
-	public void setFavPet(int favPet) {
+	public void setFavPet(String favPet) {
 		this.favPet = favPet;
 	}
 
@@ -80,7 +80,7 @@ public class Owner implements Serializable, Comparable<Owner>, Comparator<Owner>
 	 * @param date  the pet's birthdate
 	 * @throws PetWithTheSameNameException
 	 */
-	public void addPet(String id, String name, int genre, int type, String date) throws PetWithTheSameNameException {
+	public void addPet(String id, String name, String genre, String type, String date) throws PetWithTheSameNameException {
 		if (verifyExistanceOfAPet(name)) {
 			throw new PetWithTheSameNameException(
 					"The Owner" + getName() + getLastName() + "has already a pet called " + name);
@@ -173,15 +173,17 @@ public class Owner implements Serializable, Comparable<Owner>, Comparator<Owner>
 
 	}
 
-	public int compareByFav(Owner owner1, Owner owner2) {
-		int pO1 = owner1.getFavPet();
-		int pO2 = owner2.getFavPet();
-		if (pO1 > pO2)
-			return 1;
-		if (pO1 < pO2)
-			return -1;
-		return 0;
-	}
+//	public int compareByFav(Owner owner1, Owner owner2) {
+//		String pO1 = owner1.getFavPet();
+//		String pO2 = owner2.getFavPet();
+//		if (pO1 > pO2)
+//			return 1;
+//		if (pO1 < pO2)
+//			return -1;
+//		return 0;
+//	}
+	
+	
 
 	@Override
 	public int compareTo(Owner owner) {

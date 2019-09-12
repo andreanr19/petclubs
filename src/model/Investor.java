@@ -6,11 +6,17 @@ import java.util.*;
 public class Investor {
 
 	private ArrayList<Club> theClubs;
+	private ArrayList<Owner> theOwners;
+	private ArrayList<Pet> thePets;
+	
 
 	public Investor() {
 		theClubs = new ArrayList<Club>();
+		theOwners = new ArrayList<Owner>();
+		thePets = new ArrayList<Pet>();
 		try {
 			loadClubsInformation();
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -29,12 +35,12 @@ public class Investor {
 
 	public void loadClubsInformation() throws IOException {
 
-		File fl = new File("data/MOCK_DATA (1).csv");
+		File fl = new File("data/clubData.csv");
 		FileReader fr = new FileReader(fl);
 		BufferedReader br = new BufferedReader(fr);
 		String line = br.readLine();
 		while (line != null) {
-			String[] components = line.split("_");
+			String[] components = line.split(",");
 			String id = components[0];
 			String name = components[1];
 			String foundationDate = components[2];
@@ -43,6 +49,48 @@ public class Investor {
 			Club newC = new Club(id, name, foundationDate, type);
 			theClubs.add(newC);
 			line = br.readLine();
+		}
+		br.close();
+		fr.close();
+	}
+	public void loadOwnerInformation() throws IOException {
+		File fl = new File("data/ownerData.cvs");
+		FileReader fr = new FileReader(fl);
+		BufferedReader br = new BufferedReader(fr);
+		String line = br.readLine();
+		while (line != null) {
+			String[] components = line.split(",");
+			String id = components[0];
+			String name = components[1];
+			String lastName = components[2];
+			String date = components[3];
+			String favPet = components[4];
+
+			Owner newOwner = new Owner(id, name, lastName, date, favPet);
+			theOwners.add(newOwner);
+			line = br.readLine();
+
+		}
+		br.close();
+		fr.close();
+	}
+	public void loadPetInformation() throws IOException{
+		File fl = new File("data/petData.cvs");
+		FileReader fr = new FileReader(fl);
+		BufferedReader br = new BufferedReader(fr);
+		String line = br.readLine();
+		while (line != null) {
+			String[] components = line.split(",");
+			String id = components[0];
+			String name = components[1];
+			String gender = components[2];
+			String type = components[3];
+			String date = components[4];
+
+			Owner newOwner = new Owner(id, name, gender, type, date);
+			theOwners.add(newOwner);
+			line = br.readLine();
+
 		}
 		br.close();
 		fr.close();
@@ -76,7 +124,7 @@ public class Investor {
 	}
 
 	public void toPrintAReport() throws FileNotFoundException {
-		String ruta = ("data/MOCK_DATA (1).csv");
+		String ruta = ("/data/MOCK_DATA(1).csv");
 		PrintWriter w = new PrintWriter(new File(ruta));
 		String theReport = toPrint();
 		w.print(theReport);

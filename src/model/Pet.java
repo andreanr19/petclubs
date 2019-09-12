@@ -11,11 +11,11 @@ public class Pet implements Serializable, Comparable<Pet> {
 	
 	private String id;
 	private String name;
-	private int genre;
-	private int type;
+	private String genre;
+	private String type;
 	private String date;
 	
-	public Pet(String id, String name, int genre, int type, String date) {
+	public Pet(String id, String name, String genre, String type, String date) {
 		this.id = id;
 		this.name = name;
 		this.genre = genre;
@@ -39,19 +39,19 @@ public class Pet implements Serializable, Comparable<Pet> {
 		this.name = name;
 	}
 
-	public int getGenre() {
+	public String getGenre() {
 		return genre;
 	}
 
-	public void setGenre(int genre) {
+	public void setGenre(String genre) {
 		this.genre = genre;
 	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
