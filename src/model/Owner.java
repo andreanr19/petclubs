@@ -203,5 +203,8 @@ public class Owner implements Serializable, Comparable<Owner>, Comparator<Owner>
 	public int compareToDate(Owner owner) {
 		return this.getDate().compareTo(owner.getDate());
 	}
+	public void addPet(Pet e) {
+		thePets.add(e);
+	}
 	
 }

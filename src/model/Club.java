@@ -303,4 +303,7 @@ public class Club implements Comparable<Club>, Comparator<Club> {
 		return type.compareTo(c.getType());
 
 	}
+	public void addOwner(Owner c) {
+		theOwners.add(c);
+	}
 }

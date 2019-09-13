@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ public class Menu {
 		sc = new Scanner(System.in);
 		welcomeToTheProgram();
 		systemManagement();
+		init();
 
 	}
 
@@ -107,6 +109,22 @@ public class Menu {
 
 			case 12:
 				toSaveInformation();
+				try {
+					inv.toPrintAReportOfOwner();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					inv.toPrintAReport();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				exit = true;
 
 				break;
@@ -423,6 +441,16 @@ public class Menu {
 		} catch (NonExistentClubException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	public void init() {
+		Club c = new Club("111", "Anr", "2/3/2018", "perro");
+		inv.addClub(c);
+		Owner o = new Owner("111", "yuyu", "borrero", "20/11/2000", "dog");
+		c.addOwner(o);
+		Pet p = new Pet("11111", "pinina", "female", "dog", "3/6/2000");
+		o.addPet(p);
+		
+		
 	}
 
 }

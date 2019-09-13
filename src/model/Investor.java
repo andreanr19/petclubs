@@ -8,7 +8,8 @@ public class Investor {
 	private ArrayList<Club> theClubs;
 	private ArrayList<Owner> theOwners;
 	private ArrayList<Pet> thePets;
-	
+	private static final String path= "data/clubData.csv";
+	private static final String serialized = "data/owner.txt";
 
 	public Investor() {
 		theClubs = new ArrayList<Club>();
@@ -16,7 +17,8 @@ public class Investor {
 		thePets = new ArrayList<Pet>();
 		try {
 			loadClubsInformation();
-			
+			loadOwnerInformation();
+			loadPetInformation();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,9 +37,7 @@ public class Investor {
 
 	public void loadClubsInformation() throws IOException {
 
-		File fl = new File("data/clubData.csv");
-		FileReader fr = new FileReader(fl);
-		BufferedReader br = new BufferedReader(fr);
+		BufferedReader br= new BufferedReader(new FileReader(new File(path)));
 		String line = br.readLine();
 		while (line != null) {
 			String[] components = line.split(",");
@@ -51,8 +51,29 @@ public class Investor {
 			line = br.readLine();
 		}
 		br.close();
-		fr.close();
+		
 	}
+//	public void loadClubsInformation2() throws IOException {
+//
+//		File fl = new File("data/clubData. csv");
+//		FileReader fr = new FileReader(fl);
+//		BufferedReader br = new BufferedReader(fr);
+//		String line = br.readLine();
+//		while (line != null) {
+//			String[] components = line.split(",");
+//			String id = components[0];
+//			String name = components[1];
+//			String foundationDate = components[2];
+//			String type = components[3];
+//
+//			Club newC = new Club(id, name, foundationDate, type);
+//			theClubs.add(newC);
+//			line = br.readLine();
+//		}
+//		br.close();
+//		fr.close();
+//	}
+
 	public void loadOwnerInformation() throws IOException {
 		File fl = new File("data/ownerData.cvs");
 		FileReader fr = new FileReader(fl);
@@ -74,7 +95,8 @@ public class Investor {
 		br.close();
 		fr.close();
 	}
-	public void loadPetInformation() throws IOException{
+
+	public void loadPetInformation() throws IOException {
 		File fl = new File("data/petData.cvs");
 		FileReader fr = new FileReader(fl);
 		BufferedReader br = new BufferedReader(fr);
@@ -114,25 +136,32 @@ public class Investor {
 		}
 	}
 
-	public String toPrint() {
-		String message = "";
-		for (int i = 0; i < theClubs.size(); i++) {
-			message += theClubs.get(i).getId() + "_" + theClubs.get(i).getName() + "_"
-					+ theClubs.get(i).getFoundationDate() + "_" + theClubs.get(i).getFoundationDate() + "\n";
-		}
-		return message;
-	}
-
 	public void toPrintAReport() throws FileNotFoundException {
-		String ruta = ("/data/MOCK_DATA(1).csv");
-		PrintWriter w = new PrintWriter(new File(ruta));
-		String theReport = toPrint();
-		w.print(theReport);
+		String msg = "";
+		PrintWriter w = new PrintWriter(new File(path));
+		for (int i = 0; i < theClubs.size(); i++) {
+			msg += theClubs.get(i).getId() + "_" + theClubs.get(i).getName() + "_" + theClubs.get(i).getFoundationDate()
+					+ "_" + theClubs.get(i).getFoundationDate() + "\n";
+		}
+
+		w.print(msg);
 		w.close();
 
 	}
-
-	// TO SEARCH
+	public void toPrintAReportOfOwner() throws FileNotFoundException, IOException{
+		ObjectOutputStream towrite= new ObjectOutputStream(new FileOutputStream(serialized)); 
+		towrite.writeObject(theOwners);
+		towrite.close();
+	}
+	
+	public void toLoadOwners() throws FileNotFoundException, ClassNotFoundException, IOException{
+		ObjectInputStream toLoad = new ObjectInputStream(new FileInputStream(serialized));
+		theOwners=(ArrayList<Owner>) toLoad.readObject();
+		toLoad.close();
+	}
+	
+	
+	//METODOS DE BUSQUEDA
 	public Club searchClubByTheName(String name) throws NonExistentClubException {
 		Club theClub = null;
 		boolean found = false;
@@ -167,20 +196,22 @@ public class Investor {
 		return theClub;
 
 	}
-	
-	public void toDeleteAClub(String name) throws NonExistentClubException{
-		boolean found= false;
-		for(int i=0; i<theClubs.size() && !found; i++) {
-			if(theClubs.get(i).getName().equalsIgnoreCase(name)) {
-				found =true;
+
+	//ELIMINAR CLUB
+	public void toDeleteAClub(String name) throws NonExistentClubException {
+		boolean found = false;
+		for (int i = 0; i < theClubs.size() && !found; i++) {
+			if (theClubs.get(i).getName().equalsIgnoreCase(name)) {
+				found = true;
 				theClubs.remove(i);
 				System.out.println("The club " + name + " has been sucesfull deleted from the system");
-			}else  {
+			} else {
 				throw new NonExistentClubException("The club " + name + " doesn't exist in the system");
 			}
 		}
 	}
 
+	//BUSQUEDA
 	public Club searchClubByThId(String id) throws NonExistentClubException {
 		Club theClub = null;
 		boolean found = false;
@@ -197,97 +228,121 @@ public class Investor {
 		return theClub;
 
 	}
+
+	//ORDENAMIENTO
 	public void bubbleSortAmountOwner() {
-		
-		Club aux=null;
-		
-		for(int i=0;i<theClubs.size();i++) {
-			for(int j=0; j<theClubs.size()-1;j++) {
-				//Mayor a cero, el primer objeto es mayor al segundo
-				if(theClubs.get(j).compare(theClubs.get(j), theClubs.get(j+1))>0) {
-					aux=theClubs.get(j);
-					theClubs.set(j, theClubs.get(j+1));
-					theClubs.set(j+1,aux);
+
+		Club aux = null;
+
+		for (int i = 0; i < theClubs.size(); i++) {
+			for (int j = 0; j < theClubs.size() - 1; j++) {
+				// Mayor a cero, el primer objeto es mayor al segundo
+				if (theClubs.get(j).compare(theClubs.get(j), theClubs.get(j + 1)) > 0) {
+					aux = theClubs.get(j);
+					theClubs.set(j, theClubs.get(j + 1));
+					theClubs.set(j + 1, aux);
 				}
 			}
 		}
 	}
+	//METODOS DE ORDENAMIENTO POR ID
 	public void selectionSortId() {
-		for(int i=0;i< theClubs.size()-1;i++) {
+		for(int i=0; i<theClubs.size()-1; i++) {
+			String clubMin= theClubs.get(i).getId();
 			int min=i;
-			Club aux= null;
-			for(int j=i+1; j< theClubs.size();j++) {
-				if(theClubs.get(j).idComparation(theClubs.get(min))<0){
+			for(int j=i+1; j<theClubs.size(); j++) {
+				String actual =theClubs.get(j).getId();
+				if(actual.compareTo(clubMin)<0) {
+					clubMin= actual;
 					min=j;
-					aux= theClubs.get(min);
-					theClubs.set(min, theClubs.get(i));
-					theClubs.set(i, aux);
+					
 				}
 			}
+			Club temporal = theClubs.get(min);
+			theClubs.set(min, theClubs.get(i));
+			theClubs.set(i, temporal);
 		}
 	}
+
+	//METODOS DE ORDENAMIENTO POR NOMBRE
 	public void selectionSortName() {
-		for(int i=0;i< theClubs.size()-1;i++) {
+		for(int i=0; i<theClubs.size()-1; i++) {
+			String clubMin= theClubs.get(i).getName();
 			int min=i;
-			Club aux= null;
-			for(int j=i+1; j< theClubs.size();j++) {
-				if(theClubs.get(j).compareTo(theClubs.get(min))<0){
+			for(int j=i+1; j<theClubs.size(); j++) {
+				String actual =theClubs.get(j).getName();
+				if(actual.compareTo(clubMin)<0) {
+					clubMin= actual;
 					min=j;
-					aux= theClubs.get(min);
-					theClubs.set(min, theClubs.get(i));
-					theClubs.set(i, aux);
+					
 				}
 			}
+			Club temporal = theClubs.get(min);
+			theClubs.set(min, theClubs.get(i));
+			theClubs.set(i, temporal);
 		}
 	}
+	//METODOS DE ORDENAMIENTO POR FECHA DE CREACIÓN
 	public void selectionSortFoundationDate() {
-		for(int i=0;i< theClubs.size()-1;i++) {
+		for(int i=0; i<theClubs.size()-1; i++) {
+			String clubMin= theClubs.get(i).getFoundationDate();
 			int min=i;
-			Club aux= null;
-			for(int j=i+1; j< theClubs.size();j++) {
-				if(theClubs.get(j).idComparation(theClubs.get(min))<0){
+			for(int j=i+1; j<theClubs.size(); j++) {
+				String actual =theClubs.get(j).getFoundationDate();
+				if(actual.compareTo(clubMin)<0) {
+					clubMin= actual;
 					min=j;
-					aux= theClubs.get(min);
-					theClubs.set(min, theClubs.get(i));
-					theClubs.set(i, aux);
+					
 				}
 			}
+			Club temporal = theClubs.get(min);
+			theClubs.set(min, theClubs.get(i));
+			theClubs.set(i, temporal);
 		}
 	}
+	//METODOS DE ORDENAMIENTO POR TIPO DE MASCOTA FAVORITA
 	public void selectionSortforFavPet() {
-		for(int i=0;i< theClubs.size()-1;i++) {
+		for(int i=0; i<theClubs.size()-1; i++) {
+			String clubMin= theClubs.get(i).getType();
 			int min=i;
-			Club aux= null;
-			for(int j=i+1; j< theClubs.size();j++) {
-				if(theClubs.get(j).petFavComparation(theClubs.get(min))<0){
+			for(int j=i+1; j<theClubs.size(); j++) {
+				String actual =theClubs.get(j).getType();
+				if(actual.compareTo(clubMin)<0) {
+					clubMin= actual;
 					min=j;
-					aux= theClubs.get(min);
-					theClubs.set(min, theClubs.get(i));
-					theClubs.set(i, aux);
+					
 				}
 			}
+			Club temporal = theClubs.get(min);
+			theClubs.set(min, theClubs.get(i));
+			theClubs.set(i, temporal);
 		}
 	}
 	
+	//BUSQUEDA BINARIA POR NOMBRE
 	public Club binaryByName(String name) {
-		Club pet=null;
-		int start=0;
-		int stop=theClubs.size()-1;
-		int middle=0;
-		boolean ok=false;
-		while(start<=stop && !ok) {
-			middle= (stop-start)/2;
-			if(theClubs.get(middle).getName().compareTo(name)<0) {
-				start= middle+1;
-				
-			}else if(theClubs.get(middle).getName().compareTo(name)>0){
-				stop= middle-1;
-			}else if(theClubs.get(middle).getName().compareTo(name)==0) {
-				ok=true;
+		Club pet = null;
+		int start = 0;
+		int stop = theClubs.size() - 1;
+		int middle = 0;
+		boolean ok = false;
+		while (start <= stop && !ok) {
+			middle = (stop - start) / 2;
+			if (theClubs.get(middle).getName().compareTo(name) < 0) {
+				start = middle + 1;
+
+			} else if (theClubs.get(middle).getName().compareTo(name) > 0) {
+				stop = middle - 1;
+			} else if (theClubs.get(middle).getName().compareTo(name) == 0) {
+				ok = true;
 			}
 		}
 		return theClubs.get(middle);
-		
+
+	}
+	//ORDENAMIENTO COMPARATOR POR ID
+	public void comparatorSortByIdOfTheOwner() {
+		Collections.sort(theOwners,new OwnerComparator());
 	}
 
 	public ArrayList<Club> getTheClubs() {
@@ -296,6 +351,10 @@ public class Investor {
 
 	public void setTheClubs(ArrayList<Club> theClubs) {
 		this.theClubs = theClubs;
+	}
+
+	public void addClub(Club c) {
+		theClubs.add(c);
 	}
 
 }
